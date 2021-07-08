@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.mj.aop_part4_chapter04">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,11 +11,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Aoppart4chapter04">
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity">
+        </activity>
+        <activity android:name=".SignInActivity"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="github-auth"
+                    android:scheme="aop-part4-chapter5" />
             </intent-filter>
         </activity>
     </application>
