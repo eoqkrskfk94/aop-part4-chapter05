@@ -11,10 +11,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Aoppart4chapter04">
+        <activity android:name=".SearchActivity"></activity>
+        <activity android:name=".MainActivity"></activity>
         <activity
-            android:name=".MainActivity">
-        </activity>
-        <activity android:name=".SignInActivity"
+            android:name=".SignInActivity"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,12 +23,13 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-                <action android:name="android.intent.category.DEFAULT" />
-                <action android:name="android.intent.category.BROWSABLE" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
                     android:host="github-auth"
-                    android:scheme="aop-part4-chapter5" />
+                    android:scheme="aop-part4-chapter05" />
             </intent-filter>
         </activity>
     </application>

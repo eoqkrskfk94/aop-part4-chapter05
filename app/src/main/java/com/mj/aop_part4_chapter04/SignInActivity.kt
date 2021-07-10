@@ -28,7 +28,13 @@ class SignInActivity : AppCompatActivity(), CoroutineScope {
         binding = ActivitySignInBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        initViews()
+        if(checkAuthCodeExist()) {
+            launchMainActivity()
+        } else{
+            initViews()
+        }
+
+
     }
 
     private fun initViews() = with(binding) {
@@ -36,6 +42,16 @@ class SignInActivity : AppCompatActivity(), CoroutineScope {
             loginGithub()
         }
     }
+
+    private fun launchMainActivity() {
+        startActivity(Intent(this, MainActivity::class.java). apply {
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        })
+    }
+
+    private fun checkAuthCodeExist(): Boolean = authTokenProvider.token.isNullOrEmpty().not()
+
 
     private fun loginGithub() {
         val loginUri = Uri.Builder().scheme("https").authority("github.com")
