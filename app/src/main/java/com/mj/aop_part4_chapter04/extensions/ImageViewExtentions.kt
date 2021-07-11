@@ -13,12 +13,13 @@ private val factory = DrawableCrossFadeFactory.Builder().setCrossFadeEnabled(tru
 
 internal fun ImageView.clear() = Glide.with(context).clear(this)
 
-internal fun ImageView.loadCenterInside(url:String, corner: Float = 0f) {
+internal fun ImageView.loadCenterInside(url: String, corner: Float = 0f) {
     Glide.with(this)
         .load(url)
         .transition(DrawableTransitionOptions.withCrossFade(factory))
         .diskCacheStrategy(DiskCacheStrategy.ALL)
-        .apply{
-            if(corner > 0) transforms(CenterInside(), RoundedCorners(corner.fromDpToPx()))
+        .apply {
+            if (corner > 0) transforms(CenterInside(), RoundedCorners(corner.fromDpToPx()))
         }
+        .into(this)
 }

@@ -1,5 +1,6 @@
 package com.mj.aop_part4_chapter04
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.view.isGone
@@ -63,6 +64,13 @@ class SearchActivity : AppCompatActivity(), CoroutineScope {
     private fun setData(items: List<GithubRepoEntity>) {
         adapter.setSearchResultList(items) {
 
+            startActivity(
+                Intent(this@SearchActivity, RepositoryActivity::class.java).apply {
+                    putExtra(RepositoryActivity.REPOSITORY_OWNER_KEY, it.owner.login)
+                    putExtra(RepositoryActivity.REPOSITORY_NAME_KEY, it.name)
+                })
+
         }
     }
+
 }
