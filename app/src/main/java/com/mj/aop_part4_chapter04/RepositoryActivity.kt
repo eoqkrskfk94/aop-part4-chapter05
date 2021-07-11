@@ -2,7 +2,9 @@ package com.mj.aop_part4_chapter04
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
+import com.mj.aop_part4_chapter04.data.database.DataBaseProvider
 import com.mj.aop_part4_chapter04.data.entity.GithubRepoEntity
 import com.mj.aop_part4_chapter04.databinding.ActivityRepositoryBinding
 import com.mj.aop_part4_chapter04.extensions.loadCenterInside
@@ -22,6 +24,8 @@ class RepositoryActivity : AppCompatActivity(), CoroutineScope {
         const val REPOSITORY_OWNER_KEY = "REPOSITORY_OWNER_KEY"
         const val REPOSITORY_NAME_KEY = "REPOSITORY_NAME_KEY"
     }
+
+    private val repoDao by lazy { DataBaseProvider.provideDB(applicationContext).repositoryDao() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,9 +63,10 @@ class RepositoryActivity : AppCompatActivity(), CoroutineScope {
                 )
 
                 if(response.isSuccessful) {
-                    showLoading(false)
+
                     val body = response.body()
                     withContext(Dispatchers.Main) {
+                        showLoading(false)
                         body?.let { repo ->
                             repoEntity = repo
                         }
@@ -84,6 +89,43 @@ class RepositoryActivity : AppCompatActivity(), CoroutineScope {
         }
         descriptionTextView.text = githubRepoEntity.description
         updateTimeTextView.text = githubRepoEntity.updatedAt
+
+        setLikeState(githubRepoEntity)
+    }
+
+    private fun setLikeState(githubRepoEntity: GithubRepoEntity) = launch {
+        withContext(Dispatchers.IO){
+            val repo = repoDao.getRepository(githubRepoEntity.fullName)
+            val isLike = repo != null
+            withContext(Dispatchers.Main) {
+                setLikeImage(isLike)
+                binding.likeButton.setOnClickListener {
+                    likeGithubRepository(githubRepoEntity, isLike)
+                }
+            }
+        }
+    }
+
+    private fun setLikeImage(isLike: Boolean) {
+        binding.likeButton.setImageDrawable(ContextCompat.getDrawable(this,
+        if(isLike){
+            R.drawable.ic_like
+        }else{
+            R.drawable.ic_dislike
+        }))
+    }
+
+    private fun likeGithubRepository(githubRepoEntity: GithubRepoEntity, isLike: Boolean) = launch {
+        withContext(Dispatchers.IO) {
+            if(isLike) {
+                repoDao.remove(githubRepoEntity.fullName)
+            }else
+                repoDao.insert(githubRepoEntity)
+            withContext(Dispatchers.Main){
+                setLikeImage(isLike.not())
+
+            }
+        }
     }
 
 

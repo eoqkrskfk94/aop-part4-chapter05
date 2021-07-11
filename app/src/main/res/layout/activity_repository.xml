@@ -50,7 +50,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/dividerView"
         android:layout_marginEnd="8dp"
-        tools:src="@drawable/ic_dislike"
+        tools:src="@drawable/ic_heart"
         android:scaleType="center"
         app:tint="@color/red" />
 
